@@ -154,8 +154,12 @@ const receive_payment = async (req, res, next) => {
               product_id: item?.product_id,
             });
 
-            product.size[item.size] =
-              Number(product.size[item.size]) - Number(item.quantity);
+            let product_copy = { ...product._doc };
+            let size = { ...product_copy.size };
+
+            size[item.size] = Number(size[item.size]) - Number(item.quantity);
+
+            product.size = size;
             product.total = Number(product.total) - Number(item.quantity);
 
             await product.save();

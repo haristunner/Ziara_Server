@@ -5,11 +5,12 @@ app.use(express.json());
 
 const cors = require("cors");
 app.use(cors());
+require("dotenv").config();
 
-const { MONGO_DB_URI, PORT } = require("./config/config");
+const { PORT } = require("./config/config");
 const db = require("mongoose");
 
-db.connect(MONGO_DB_URI)
+db.connect(process.env.MONGO_DB_URI)
   .then((res) => {
     console.log(`DB CONNECTED`);
   })
