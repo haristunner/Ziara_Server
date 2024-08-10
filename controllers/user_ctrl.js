@@ -327,6 +327,32 @@ const get_carts = async (req, res, next) => {
   }
 };
 
+const delete_product_in_cart = async (req, res, next) => {
+  try {
+    const { user_id, product_id } = req.body;
+
+    const user = await User.findOne({ user_id });
+
+    if (!user) {
+      return next(new CustomError("Not a valid user", 404));
+    }
+    let cart_copy = [...user.cart].filter(
+      (item) => item.product_id !== product_id
+    );
+
+    user.cart = cart_copy;
+    await user.save();
+
+    return res.status(200).send({
+      success: true,
+      data: cart_copy,
+      error: null,
+    });
+  } catch (error) {
+    return next(new CustomError(error.message, 404));
+  }
+};
+
 module.exports = {
   create_user,
   add_new_address,
@@ -339,4 +365,5 @@ module.exports = {
   add_to_wishlist,
   get_wishlists,
   get_carts,
+  delete_product_in_cart,
 };

@@ -11,6 +11,7 @@ const {
   add_to_wishlist,
   get_wishlists,
   get_carts,
+  delete_product_in_cart,
 } = require("../controllers/user_ctrl");
 
 const router = express.Router();
@@ -29,5 +30,6 @@ router.route("/add_to_cart").post(valid_user, add_to_cart);
 router.route("/add_to_wishlist").post(valid_user, add_to_wishlist);
 router.route("/get_wishlists").get(get_wishlists);
 router.route("/get_carts").get(get_carts);
+router.route("/delete_product_in_cart").post(delete_product_in_cart);
 
 module.exports = router;
