@@ -69,17 +69,26 @@ const get_address = async (req, res) => {
   }
 };
 
-const add_new_address = () => {
+const add_new_address = async (req, res, next) => {
   try {
     const { address, user_id } = req.body;
+
+    let user = await User.findOne({ user_id });
+
+    let address_copy = [...user.address];
+
+    address_copy.push(address);
+
+    user.address = address_copy;
+    await user.save();
+
+    return res.status(200).send({
+      success: true,
+      data: {},
+      error: null,
+    });
   } catch (error) {
-    return res
-      .send({
-        error: error.message,
-        success: false,
-        data: null,
-      })
-      .status(500);
+    return next(new CustomError(error.message, 404));
   }
 };
 
